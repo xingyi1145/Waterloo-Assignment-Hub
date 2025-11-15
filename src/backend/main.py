@@ -49,6 +49,8 @@ async def root():
     }
 
 
-@app.get("/health")
+@app.get("/api/health")
 async def health_check():
-    return {"status": "healthy"}
+    """Health check endpoint for monitoring"""
+    return {"status": "healthy", "service": "wcah-backend"}
+

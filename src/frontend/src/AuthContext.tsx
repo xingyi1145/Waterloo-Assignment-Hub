@@ -25,7 +25,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       apiClient
         .getCurrentUser()
         .then(setUser)
-        .catch(() => {
+        .catch((error) => {
+          // Clear invalid token
+          console.log('Token validation failed:', error.message);
           localStorage.removeItem('token');
         })
         .finally(() => setLoading(false));

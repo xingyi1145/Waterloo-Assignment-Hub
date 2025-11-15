@@ -1,259 +1,463 @@
 # Waterloo CS Assignment Hub (WCAH)
 
-A web platform for students to explore, solve, and share solutions to assignment-style programming problems from University of Waterloo CS courses. Professors can publish courses, assignments, and questions, while students can submit solutions and engage with peers through likes and comments.
+A full-stack web application for CS course assignments, practice questions, and solution sharing.
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### One-Command Launch
 
-- Python 3.8+
-- Node.js 18+ and npm
-- Git
+```bash
+python3 start.py
+```
 
-### Backend Setup
+That's it! The script automatically:
+- ✅ Checks prerequisites (Python 3.8+, Node.js 18+)
+- ✅ Creates virtual environment if needed
+- ✅ Installs all dependencies
+- ✅ Sets up and seeds database
+- ✅ Starts backend server (port 8000)
+- ✅ Starts frontend server (port 5173)
 
-1. **Clone the repository** (if not already done):
-   ```bash
-   git clone <your-repo-url>
-   cd cs137-web-app
-   ```
+**Access the app:**
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
 
-2. **Create and activate a virtual environment**:
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+**Sample Accounts:**
+- Professor: `prof_smith` / `password123`
+- Student: `alice` / `password123`
 
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Initialize database** (optional - happens automatically on first run):
-   ```bash
-   python scripts/seed_database.py
-   ```
-   This will create sample data (users, courses, assignments, questions).
-   
-   Default credentials (password: `password123`):
-   - Professors: `prof_smith`, `prof_jones`
-   - Students: `alice`, `bob`, `charlie`
-
-5. **Run the FastAPI server**:
-   ```bash
-   uvicorn src.backend.main:app --reload
-   ```
-
-   The API will be available at `http://localhost:8000`
-
-5. **Access API documentation**:
-   - Swagger UI: `http://localhost:8000/docs`
-   - ReDoc: `http://localhost:8000/redoc`
-
-### Frontend Setup
-
-1. **Navigate to frontend directory**:
-   ```bash
-   cd src/frontend
-   ```
-
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-
-3. **Start the development server**:
-   ```bash
-   npm run dev
-   ```
-
-   The frontend will be available at `http://localhost:5173`
-
-4. **Open in browser**:
-   - Navigate to `http://localhost:5173`
-   - Sign up as a student or professor
-   - Start exploring!
+**Stop:** Press `Ctrl+C` or run `pkill -f uvicorn && pkill -f vite`
 
 ## 📁 Project Structure
 
 ```
 cs137-web-app/
-├── docs/
-│   ├── Charter.md              # Project charter and requirements
-│   └── DATABASE.md             # Database schema and management guide
 ├── src/
-│   ├── backend/
-│   │   ├── main.py            # FastAPI application entry point
-│   │   ├── models.py          # SQLAlchemy database models
-│   │   ├── schemas.py         # Pydantic validation schemas
-│   │   ├── database.py        # Database configuration
-│   │   ├── auth.py            # Authentication utilities (JWT, password hashing)
-│   │   └── routes/            # API route handlers
-│   │       ├── auth.py        # Authentication endpoints
-│   │       ├── courses.py     # Course management
-│   │       ├── assignments.py # Assignment management
-│   │       ├── questions.py   # Question management
-│   │       └── solutions.py   # Solution submission & comments
-│   ├── database/              # Alembic migrations
-│   │   ├── env.py             # Migration environment config
-│   │   └── versions/          # Migration files
-│   └── frontend/              # React + TypeScript frontend
-│       ├── src/
-│       │   ├── api.ts         # API client
-│       │   ├── types.ts       # TypeScript types
-│       │   ├── AuthContext.tsx # Auth state management
-│       │   ├── pages/         # Page components
-│       │   └── components/    # Reusable components
-│       ├── package.json
-│       └── vite.config.ts
+│   ├── backend/              # FastAPI backend
+│   │   ├── main.py           # FastAPI app entry point
+│   │   ├── models.py         # SQLAlchemy database models
+│   │   ├── schemas.py        # Pydantic validation schemas
+│   │   ├── auth.py           # JWT authentication
+│   │   ├── database.py       # Database configuration
+│   │   └── routes/           # API route modules
+│   │       ├── auth.py       # Authentication endpoints
+│   │       ├── courses.py    # Course management
+│   │       ├── assignments.py
+│   │       ├── questions.py
+│   │       └── solutions.py
+│   ├── frontend/             # React + TypeScript frontend
+│   │   └── src/
+│   │       ├── api.ts        # Type-safe API client
+│   │       ├── AuthContext.tsx  # Auth state management
+│   │       ├── pages/        # Page components
+│   │       └── components/   # Reusable components
+│   └── database/             # Alembic migrations
 ├── scripts/
-│   ├── seed_database.py       # Populate database with sample data
-│   ├── inspect_database.py    # View database contents
-│   └── backup_database.py     # Backup & restore utility
-├── wcah.db                    # SQLite database file
-├── alembic.ini                # Alembic configuration
-├── requirements.txt           # Python dependencies
-└── README.md                  # This file
+│   ├── seed_database.py      # Populate sample data
+│   ├── inspect_database.py   # View database contents
+│   └── backup_database.py    # Backup/restore utility
+├── docs/
+│   ├── Charter.md            # Project charter
+│   └── DATABASE.md           # Database schema documentation
+├── wcah.db                   # SQLite database file
+├── start.py                  # Main launcher script
+├── fix_and_start.py          # Complete fix & restart script
+├── test_and_fix.py           # Diagnostic tool
+├── requirements.txt          # Python dependencies
+└── README.md                 # This file
 ```
 
-## 🔑 API Endpoints
+## 🛠️ Tech Stack
 
-### Authentication
-- `POST /api/auth/signup` - Register a new user (student or professor)
-- `POST /api/auth/login` - Login and get JWT token
-- `GET /api/auth/me` - Get current user information
+**Backend:**
+- FastAPI 0.104.1 - Modern, fast Python web framework
+- SQLAlchemy 2.0.23 - SQL toolkit and ORM
+- SQLite - Lightweight database
+- Alembic 1.12.1 - Database migrations
+- JWT + bcrypt - Secure authentication
 
-### Courses
-- `POST /api/courses/` - Create a new course (professors only)
-- `GET /api/courses/` - List all courses
-- `GET /api/courses/{course_id}` - Get course details
-- `POST /api/courses/{course_id}/enroll` - Enroll in a course
+**Frontend:**
+- React 18.3.1 - UI library
+- TypeScript 5.9.3 - Type-safe JavaScript
+- Vite 4.5.14 - Lightning-fast build tool
+- React Router 6.30.2 - Client-side routing
 
-### Assignments
-- `POST /api/assignments/` - Create assignment (professors only)
-- `GET /api/assignments/course/{course_id}` - List assignments for a course
-- `GET /api/assignments/{assignment_id}` - Get assignment details
+## 📚 Features
 
-### Questions
-- `POST /api/questions/` - Create question (professors only)
-- `GET /api/questions/assignment/{assignment_id}` - List questions in an assignment
-- `GET /api/questions/{question_id}` - Get question details
+### For Students
+- 📖 Browse and enroll in courses
+- 📝 View assignments and practice questions
+- 💻 Submit code solutions
+- 👍 Like and comment on solutions
+- 🏆 Learn from community solutions
 
-### Solutions
-- `POST /api/solutions/` - Submit a solution
-- `GET /api/solutions/question/{question_id}` - List solutions for a question
-- `GET /api/solutions/{solution_id}` - Get solution details
-- `POST /api/solutions/{solution_id}/like` - Like a solution
-- `POST /api/solutions/{solution_id}/comments` - Add a comment
-- `GET /api/solutions/{solution_id}/comments` - List comments
+### For Professors
+- 📚 Create and manage courses
+- 📝 Create assignments with questions
+- ✅ Define test cases for auto-grading
+- 👥 View student enrollments
+- 📊 Monitor student activity
 
-## 🧪 Testing the API
+## 🔧 Manual Setup (Advanced)
 
-### Example: Register a Professor
+If you prefer manual control over the setup process:
+
+### Backend Setup
 ```bash
-curl -X POST "http://localhost:8000/api/auth/signup" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "username": "prof_smith",
-    "email": "smith@uwaterloo.ca",
-    "password": "securepass123",
-    "identity": "professor"
-  }'
-```
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-### Example: Create a Course
-```bash
-curl -X POST "http://localhost:8000/api/courses/" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_TOKEN_HERE" \
-  -d '{
-    "course_code": "CS137",
-    "course_name": "Programming Principles",
-    "description": "Introduction to programming in Python and C"
-  }'
-```
+# Install Python dependencies
+pip install -r requirements.txt
 
-## 🗄️ Database
-
-The application uses SQLite for development (stored as `wcah.db` in the project root). The database is automatically created when you first run the server.
-
-### Database Schema
-
-See [docs/DATABASE.md](docs/DATABASE.md) for detailed schema documentation.
-
-**Main tables:**
-- **Users**: username, email, password_hash, identity (student/professor)
-- **Courses**: course_code, course_name, description, creator
-- **Assignments**: assignment_name, description, course
-- **Questions**: title, description, difficulty, assignment
-- **Solutions**: code, language, status, likes, submitter
-- **Comments**: content, solution, user
-- **Testcases**: input_data, expected_output, question
-
-### Database Management
-
-**Seed with sample data:**
-```bash
+# Initialize database (first time only)
 python scripts/seed_database.py
+
+# Start backend server
+uvicorn src.backend.main:app --reload
+# Backend will run on http://localhost:8000
 ```
 
-**Inspect database:**
+### Frontend Setup
+```bash
+# Navigate to frontend directory
+cd src/frontend
+
+# Install npm dependencies
+npm install
+
+# Start development server
+npm run dev
+# Frontend will run on http://localhost:5173
+```
+
+## 🗄️ Database Management
+
+### View Database Contents
 ```bash
 python scripts/inspect_database.py
 ```
 
-**Backup/restore:**
+Interactive menu to view:
+- All tables and row counts
+- Users, courses, assignments
+- Questions, solutions, comments
+
+### Backup Database
 ```bash
-python scripts/backup_database.py
+# Create backup
+python scripts/backup_database.py backup
+
+# Restore from backup
+python scripts/backup_database.py restore backup_YYYYMMDD_HHMMSS.db
 ```
 
-## 🛠️ Development
-
-### Running in Development Mode
+### Reset Database
 ```bash
-uvicorn src.backend.main:app --reload --host 0.0.0.0 --port 8000
+# Delete and recreate
+rm wcah.db
+python scripts/seed_database.py
 ```
 
-### Database Migrations
+### Direct SQL Access
 ```bash
-# Create a migration after modifying models
-alembic revision --autogenerate -m "description"
-
-# Apply migrations
-alembic upgrade head
-
-# Rollback one migration
-alembic downgrade -1
-
-# View migration history
-alembic history
+sqlite3 wcah.db
+# sqlite> .tables
+# sqlite> SELECT * FROM users;
+# sqlite> .quit
 ```
 
-## 🔒 Security Notes
+## 🧪 Testing & Diagnostics
 
-⚠️ **Important**: The current implementation uses a hardcoded `SECRET_KEY` in `src/backend/auth.py`. 
+### Run Diagnostic Tests
+```bash
+python3 test_and_fix.py
+```
 
-**Before deploying to production:**
-1. Generate a secure random key: `openssl rand -hex 32`
-2. Store it in an environment variable
-3. Update `auth.py` to read from `os.getenv("SECRET_KEY")`
+This will test:
+- Backend health and connectivity
+- CORS configuration
+- Authentication endpoints
+- Database integrity
+- Frontend server status
 
-## 📋 TODO / Roadmap
+### Browser-Based Testing
+Open `test-connection.html` in your browser for interactive testing.
 
-- [ ] Implement testcase execution sandbox
-- [ ] Add frontend (React + TypeScript)
-- [ ] Add solution ranking algorithm
-- [ ] Implement badge/achievement system
-- [ ] Add code syntax highlighting
-- [ ] Email verification for signups
-- [ ] Password reset functionality
-- [ ] Admin dashboard
-- [ ] Deployment guide (Docker, Railway, etc.)
+### Complete Fix & Cleanup
+If you encounter issues:
+```bash
+python3 fix_and_start.py
+```
 
-## 📄 License
+This script will:
+- Stop all running servers
+- Clean up processes and caches
+- Reinstall dependencies
+- Restart everything fresh
 
-This project is for educational purposes.
+## 🐛 Troubleshooting
+
+### "Cannot connect to server" Error
+
+**Cause:** Cached browser data (old tokens in localStorage)
+
+**Solutions:**
+
+1. **Open in incognito/private window** (easiest)
+
+2. **Clear localStorage:**
+   - Open DevTools (F12)
+   - Console tab → Type: `localStorage.clear()`
+   - Press Enter → Refresh page
+
+3. **Complete fix:**
+   ```bash
+   python3 fix_and_start.py
+   ```
+
+### Port Already in Use
+
+```bash
+# Kill existing processes
+pkill -f uvicorn  # Backend on port 8000
+pkill -f vite     # Frontend on port 5173
+
+# Or kill specific ports
+fuser -k 8000/tcp
+fuser -k 5173/tcp
+
+# Then restart
+python3 start.py
+```
+
+### Backend Not Starting
+
+```bash
+# Check logs
+tail -f /tmp/wcah-backend.log
+
+# Common issues:
+# - Port 8000 in use → Kill process
+# - Database locked → Close other connections
+# - Missing dependencies → pip install -r requirements.txt
+```
+
+### Frontend Not Starting
+
+```bash
+# Check logs
+tail -f /tmp/wcah-frontend.log
+
+# Common issues:
+# - Port 5173 in use → Kill process
+# - Node modules issues → rm -rf node_modules && npm install
+# - TypeScript errors → Check console output
+```
+
+### Database Issues
+
+```bash
+# Check if database exists
+ls -lh wcah.db
+
+# Check tables
+sqlite3 wcah.db "SELECT name FROM sqlite_master WHERE type='table';"
+
+# Reset if corrupted
+rm wcah.db && python scripts/seed_database.py
+```
+
+## 📝 API Documentation
+
+Start the backend and visit:
+- **Swagger UI:** http://localhost:8000/docs
+- **ReDoc:** http://localhost:8000/redoc
+
+### Key Endpoints
+
+**Authentication:**
+```
+POST /api/auth/signup      - Register new user
+POST /api/auth/login       - Login and get JWT token
+GET  /api/auth/me          - Get current user info
+```
+
+**Courses:**
+```
+GET  /api/courses/         - List all courses
+POST /api/courses/         - Create course (professor only)
+GET  /api/courses/{id}     - Get course details
+POST /api/courses/{id}/enroll - Enroll in course
+```
+
+**Assignments:**
+```
+GET  /api/assignments/course/{id} - Get course assignments
+POST /api/assignments/            - Create assignment (professor)
+GET  /api/assignments/{id}        - Get assignment details
+```
+
+**Questions:**
+```
+GET  /api/questions/assignment/{id} - Get assignment questions
+POST /api/questions/                - Create question (professor)
+GET  /api/questions/{id}            - Get question with test cases
+```
+
+**Solutions:**
+```
+GET  /api/solutions/question/{id} - Get question solutions
+POST /api/solutions/              - Submit solution
+POST /api/solutions/{id}/like     - Like solution
+GET  /api/solutions/{id}/comments - Get comments
+POST /api/solutions/{id}/comments - Add comment
+```
+
+## 🔐 Authentication
+
+The application uses JWT (JSON Web Tokens):
+- Tokens generated on login/signup
+- Stored in browser localStorage
+- Sent via `Authorization: Bearer <token>` header
+- Protected routes require valid token
+
+**Token Flow:**
+1. User logs in → Backend generates JWT
+2. Frontend stores token in localStorage
+3. All API requests include token in headers
+4. Backend validates token before processing
+
+## 🏗️ Database Schema
+
+### Core Models
+
+**User**
+- id, username, email, password_hash
+- identity (student/professor)
+- created_at
+
+**Course**
+- id, name, code, description
+- professor_id → User
+- created_at
+
+**Assignment**
+- id, title, description, due_date
+- course_id → Course
+
+**Question**
+- id, title, description, difficulty
+- starter_code, solution_code
+- assignment_id → Assignment
+
+**Solution**
+- id, code, likes, is_public
+- question_id → Question
+- user_id → User
+
+**Comment**
+- id, content, created_at
+- solution_id → Solution
+- user_id → User
+
+**Testcase**
+- id, input, expected_output
+- question_id → Question
+
+See `docs/DATABASE.md` for complete schema details.
+
+## 🚀 Development Workflow
+
+### Making Changes
+
+1. **Backend changes:**
+   - Edit files in `src/backend/`
+   - Backend auto-reloads (uvicorn --reload)
+   - Test at http://localhost:8000/docs
+
+2. **Frontend changes:**
+   - Edit files in `src/frontend/src/`
+   - Vite hot-reloads instantly
+   - Check browser console for errors
+
+3. **Database changes:**
+   - Update models in `src/backend/models.py`
+   - Create migration: `alembic revision --autogenerate -m "description"`
+   - Apply migration: `alembic upgrade head`
+
+### Adding New Features
+
+1. **Backend:**
+   - Add model to `models.py`
+   - Add schema to `schemas.py`
+   - Create routes in `routes/`
+   - Register router in `main.py`
+
+2. **Frontend:**
+   - Add types to `types.ts`
+   - Add API methods to `api.ts`
+   - Create page component in `pages/`
+   - Add route to `App.tsx`
+
+## 📦 Deployment
+
+### Production Considerations
+
+1. **Environment Variables:**
+   - Move sensitive data to `.env` file
+   - Use proper SECRET_KEY for JWT
+   - Configure production database URL
+
+2. **Backend:**
+   - Use production ASGI server (Gunicorn + Uvicorn workers)
+   - Enable HTTPS
+   - Set appropriate CORS origins
+   - Use PostgreSQL instead of SQLite
+
+3. **Frontend:**
+   - Build for production: `npm run build`
+   - Serve static files with nginx/Apache
+   - Update API_BASE_URL to production backend
+
+4. **Database:**
+   - Regular backups
+   - Use connection pooling
+   - Set up monitoring
 
 ## 🤝 Contributing
 
-See `docs/Charter.md` for project goals and architecture decisions.
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature-name`
+3. Make changes and test thoroughly
+4. Commit: `git commit -m "Add feature"`
+5. Push: `git push origin feature-name`
+6. Create pull request
+
+## 📄 License
+
+[Add your license here]
+
+## 👥 Team
+
+CS137 Development Team
+
+---
+
+## 📚 Additional Documentation
+
+- **QUICK_START.md** - Visual quick start guide
+- **SOLUTION.md** - Detailed troubleshooting solutions
+- **docs/DATABASE.md** - Complete database schema
+- **docs/Charter.md** - Project charter and requirements
+
+## 💡 Tips
+
+- Always use incognito window when testing to avoid cache issues
+- Check browser console (F12) for detailed error messages
+- Use API docs at `/docs` for endpoint testing
+- Run `python3 test_and_fix.py` if something breaks
+
+**Questions?** Open an issue or check the documentation files.
