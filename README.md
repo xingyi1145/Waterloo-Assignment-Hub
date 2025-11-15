@@ -7,7 +7,7 @@ A web platform for students to explore, solve, and share solutions to assignment
 ### Prerequisites
 
 - Python 3.8+
-- Node.js 16+ and npm (for frontend, coming soon)
+- Node.js 18+ and npm
 - Git
 
 ### Backend Setup
@@ -29,7 +29,17 @@ A web platform for students to explore, solve, and share solutions to assignment
    pip install -r requirements.txt
    ```
 
-4. **Run the FastAPI server**:
+4. **Initialize database** (optional - happens automatically on first run):
+   ```bash
+   python scripts/seed_database.py
+   ```
+   This will create sample data (users, courses, assignments, questions).
+   
+   Default credentials (password: `password123`):
+   - Professors: `prof_smith`, `prof_jones`
+   - Students: `alice`, `bob`, `charlie`
+
+5. **Run the FastAPI server**:
    ```bash
    uvicorn src.backend.main:app --reload
    ```
@@ -40,12 +50,37 @@ A web platform for students to explore, solve, and share solutions to assignment
    - Swagger UI: `http://localhost:8000/docs`
    - ReDoc: `http://localhost:8000/redoc`
 
+### Frontend Setup
+
+1. **Navigate to frontend directory**:
+   ```bash
+   cd src/frontend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server**:
+   ```bash
+   npm run dev
+   ```
+
+   The frontend will be available at `http://localhost:5173`
+
+4. **Open in browser**:
+   - Navigate to `http://localhost:5173`
+   - Sign up as a student or professor
+   - Start exploring!
+
 ## 📁 Project Structure
 
 ```
 cs137-web-app/
 ├── docs/
-│   └── Charter.md              # Project charter and requirements
+│   ├── Charter.md              # Project charter and requirements
+│   └── DATABASE.md             # Database schema and management guide
 ├── src/
 │   ├── backend/
 │   │   ├── main.py            # FastAPI application entry point
@@ -59,8 +94,24 @@ cs137-web-app/
 │   │       ├── assignments.py # Assignment management
 │   │       ├── questions.py   # Question management
 │   │       └── solutions.py   # Solution submission & comments
-│   ├── database/              # Database migrations (future)
-│   └── frontend/              # React frontend (coming soon)
+│   ├── database/              # Alembic migrations
+│   │   ├── env.py             # Migration environment config
+│   │   └── versions/          # Migration files
+│   └── frontend/              # React + TypeScript frontend
+│       ├── src/
+│       │   ├── api.ts         # API client
+│       │   ├── types.ts       # TypeScript types
+│       │   ├── AuthContext.tsx # Auth state management
+│       │   ├── pages/         # Page components
+│       │   └── components/    # Reusable components
+│       ├── package.json
+│       └── vite.config.ts
+├── scripts/
+│   ├── seed_database.py       # Populate database with sample data
+│   ├── inspect_database.py    # View database contents
+│   └── backup_database.py     # Backup & restore utility
+├── wcah.db                    # SQLite database file
+├── alembic.ini                # Alembic configuration
 ├── requirements.txt           # Python dependencies
 └── README.md                  # This file
 ```
@@ -128,6 +179,9 @@ The application uses SQLite for development (stored as `wcah.db` in the project 
 
 ### Database Schema
 
+See [docs/DATABASE.md](docs/DATABASE.md) for detailed schema documentation.
+
+**Main tables:**
 - **Users**: username, email, password_hash, identity (student/professor)
 - **Courses**: course_code, course_name, description, creator
 - **Assignments**: assignment_name, description, course
@@ -136,6 +190,23 @@ The application uses SQLite for development (stored as `wcah.db` in the project 
 - **Comments**: content, solution, user
 - **Testcases**: input_data, expected_output, question
 
+### Database Management
+
+**Seed with sample data:**
+```bash
+python scripts/seed_database.py
+```
+
+**Inspect database:**
+```bash
+python scripts/inspect_database.py
+```
+
+**Backup/restore:**
+```bash
+python scripts/backup_database.py
+```
+
 ## 🛠️ Development
 
 ### Running in Development Mode
@@ -143,16 +214,19 @@ The application uses SQLite for development (stored as `wcah.db` in the project 
 uvicorn src.backend.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-### Database Migrations (Future)
+### Database Migrations
 ```bash
-# Initialize Alembic (when ready)
-alembic init alembic
-
-# Create a migration
+# Create a migration after modifying models
 alembic revision --autogenerate -m "description"
 
 # Apply migrations
 alembic upgrade head
+
+# Rollback one migration
+alembic downgrade -1
+
+# View migration history
+alembic history
 ```
 
 ## 🔒 Security Notes
