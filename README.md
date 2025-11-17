@@ -1,8 +1,8 @@
-# Waterloo CS Assignment Hub (WCAH)
+# Waterloo CS Assignment Hub
 
 A full-stack web application for CS course assignments, practice questions, and solution sharing.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### One-Command Launch
 
@@ -11,12 +11,12 @@ python3 start.py
 ```
 
 That's it! The script automatically:
-- ✅ Checks prerequisites (Python 3.8+, Node.js 18+)
-- ✅ Creates virtual environment if needed
-- ✅ Installs all dependencies
-- ✅ Sets up and seeds database
-- ✅ Starts backend server (port 8000)
-- ✅ Starts frontend server (port 5173)
+- Checks prerequisites (Python 3.8+, Node.js 18+)
+- Creates virtual environment if needed
+- Installs all dependencies
+- Sets up and seeds database
+- Starts backend server (port 8000)
+- Starts frontend server (port 5173)
 
 **Access the app:**
 - Frontend: http://localhost:5173
@@ -29,7 +29,7 @@ That's it! The script automatically:
 
 **Stop:** Press `Ctrl+C` or run `pkill -f uvicorn && pkill -f vite`
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 cs137-web-app/
@@ -68,7 +68,7 @@ cs137-web-app/
 └── README.md                 # This file
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 **Backend:**
 - FastAPI 0.104.1 - Modern, fast Python web framework
@@ -83,23 +83,23 @@ cs137-web-app/
 - Vite 4.5.14 - Lightning-fast build tool
 - React Router 6.30.2 - Client-side routing
 
-## 📚 Features
+## Features
 
 ### For Students
-- 📖 Browse and enroll in courses
-- 📝 View assignments and practice questions
-- 💻 Submit code solutions
-- 👍 Like and comment on solutions
-- 🏆 Learn from community solutions
+- Browse and enroll in courses
+- View assignments and practice questions
+- Submit code solutions
+- Like and comment on solutions
+- Learn from community solutions
 
 ### For Professors
-- 📚 Create and manage courses
-- 📝 Create assignments with questions
-- ✅ Define test cases for auto-grading
-- 👥 View student enrollments
-- 📊 Monitor student activity
+- Create and manage courses
+- Create assignments with questions
+- Define test cases for auto-grading
+- View student enrollments
+- Monitor student activity
 
-## 🔧 Manual Setup (Advanced)
+## Manual Setup (Advanced)
 
 If you prefer manual control over the setup process:
 
@@ -133,7 +133,7 @@ npm run dev
 # Frontend will run on http://localhost:5173
 ```
 
-## 🗄️ Database Management
+## Database Management
 
 ### View Database Contents
 ```bash
@@ -169,7 +169,7 @@ sqlite3 wcah.db
 # sqlite> .quit
 ```
 
-## 🧪 Testing & Diagnostics
+## Testing & Diagnostics
 
 ### Run Diagnostic Tests
 ```bash
@@ -198,7 +198,7 @@ This script will:
 - Reinstall dependencies
 - Restart everything fresh
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### "Cannot connect to server" Error
 
@@ -316,7 +316,7 @@ GET  /api/solutions/{id}/comments - Get comments
 POST /api/solutions/{id}/comments - Add comment
 ```
 
-## 🔐 Authentication
+## Authentication
 
 The application uses JWT (JSON Web Tokens):
 - Tokens generated on login/signup
@@ -330,7 +330,7 @@ The application uses JWT (JSON Web Tokens):
 3. All API requests include token in headers
 4. Backend validates token before processing
 
-## 🏗️ Database Schema
+## Database Schema
 
 ### Core Models
 
@@ -369,7 +369,7 @@ The application uses JWT (JSON Web Tokens):
 
 See `docs/DATABASE.md` for complete schema details.
 
-## 🚀 Development Workflow
+## Development Workflow
 
 ### Making Changes
 
@@ -402,7 +402,7 @@ See `docs/DATABASE.md` for complete schema details.
    - Create page component in `pages/`
    - Add route to `App.tsx`
 
-## 📦 Deployment
+## Deployment
 
 ### Production Considerations
 
@@ -427,7 +427,7 @@ See `docs/DATABASE.md` for complete schema details.
    - Use connection pooling
    - Set up monitoring
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create feature branch: `git checkout -b feature-name`
@@ -436,24 +436,21 @@ See `docs/DATABASE.md` for complete schema details.
 5. Push: `git push origin feature-name`
 6. Create pull request
 
-## 📄 License
 
-[Add your license here]
+## Team
 
-## 👥 Team
-
-CS137 Development Team
+Yi Xing
 
 ---
 
-## 📚 Additional Documentation
+## Additional Documentation
 
 - **QUICK_START.md** - Visual quick start guide
 - **SOLUTION.md** - Detailed troubleshooting solutions
 - **docs/DATABASE.md** - Complete database schema
 - **docs/Charter.md** - Project charter and requirements
 
-## 💡 Tips
+## Tips
 
 - Always use incognito window when testing to avoid cache issues
 - Check browser console (F12) for detailed error messages
