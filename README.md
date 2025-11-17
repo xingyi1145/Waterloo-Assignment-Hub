@@ -270,7 +270,7 @@ sqlite3 wcah.db "SELECT name FROM sqlite_master WHERE type='table';"
 rm wcah.db && python scripts/seed_database.py
 ```
 
-## 📝 API Documentation
+## API Documentation
 
 Start the backend and visit:
 - **Swagger UI:** http://localhost:8000/docs
