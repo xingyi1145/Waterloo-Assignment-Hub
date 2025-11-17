@@ -89,7 +89,7 @@ async def like_solution(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Like a solution (increment like count)
+    Like a solution (one like per user)
     """
     solution = db.query(Solution).filter(Solution.id == solution_id).first()
     if not solution:
@@ -98,6 +98,15 @@ async def like_solution(
             detail="Solution not found"
         )
     
+    # Check if user already liked this solution
+    if solution in current_user.liked_solutions:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You have already liked this solution"
+        )
+    
+    # Add user to liked_by_users
+    current_user.liked_solutions.append(solution)
     solution.likes += 1
     db.commit()
     
@@ -145,3 +154,36 @@ async def list_comments(
     """
     comments = db.query(Comment).filter(Comment.solution_id == solution_id).all()
     return [CommentResponse.from_orm(comment) for comment in comments]
+
+
+@router.delete("/{solution_id}", status_code=status.HTTP_200_OK)
+async def delete_solution(
+    solution_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Delete a solution (owner or professor can delete)
+    """
+    solution = db.query(Solution).filter(Solution.id == solution_id).first()
+    if not solution:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Solution not found"
+        )
+    
+    # Check if user is the owner or a professor
+    if solution.submitter_id != current_user.id and current_user.identity != 'professor':
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can only delete your own solutions (or any solution if you are a professor)"
+        )
+    
+    # Manually clear likes (many-to-many relationship)
+    solution.liked_by_users.clear()
+    db.flush()  # Flush to ensure likes are deleted first
+    
+    db.delete(solution)
+    db.commit()
+    
+    return {"message": "Solution deleted successfully"}

@@ -115,6 +115,20 @@
   background: #7f8c8d;
 }
 
+.btn-danger {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.875rem;
+}
+
 .btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -224,6 +238,12 @@
   color: #2c3e50;
 }
 
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
 .submit-solution-form {
   background: #f8f9fa;
   padding: 2rem;
@@ -239,6 +259,7 @@
 /* Home Page */
 .home-container {
   min-height: calc(100vh - 70px);
+  width: 100%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
@@ -334,6 +355,34 @@
   gap: 0.5rem;
 }
 
+/* Enrollment Badge */
+.enrollment-badge {
+  display: inline-block;
+  background: #27ae60;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
+
+/* Enrollment Prompt */
+.enrollment-prompt {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 2rem 0;
+  text-align: center;
+}
+
+.enrollment-prompt p {
+  margin: 0 0 1rem 0;
+  color: #856404;
+  font-size: 1.1rem;
+}
+
 /* Assignments & Questions Lists */
 .assignments-list,
 .questions-list {
@@ -343,8 +392,32 @@
   margin-top: 1rem;
 }
 
+.assignment-item-wrapper,
+.question-item-wrapper,
+.solution-item-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.assignment-item-wrapper .assignment-item,
+.question-item-wrapper .question-item,
+.solution-item-wrapper .solution-item {
+  flex: 1;
+}
+
+.assignment-actions,
+.question-actions,
+.solution-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
 .assignment-item,
-.question-item {
+.question-item,
+.solution-item {
   background: white;
   border: 1px solid #e1e8ed;
   border-radius: 8px;
@@ -355,19 +428,22 @@
 }
 
 .assignment-item:hover,
-.question-item:hover {
+.question-item:hover,
+.solution-item:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-color: #3498db;
 }
 
 .assignment-item h4,
-.question-item h4 {
+.question-item h4,
+.solution-item h4 {
   margin: 0 0 0.5rem 0;
   color: #2c3e50;
 }
 
 .assignment-item p,
-.question-item p {
+.question-item p,
+.solution-item p {
   color: #7f8c8d;
   margin: 0.5rem 0;
 }

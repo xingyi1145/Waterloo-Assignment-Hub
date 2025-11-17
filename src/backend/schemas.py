@@ -51,6 +51,7 @@ class CourseResponse(CourseBase):
     id: int
     creator_id: int
     created_at: datetime
+    is_enrolled: Optional[bool] = None
 
     class Config:
         from_attributes = True

@@ -59,6 +59,22 @@ async def list_assignments_by_course(
     """
     List all assignments for a specific course
     """
+    # Get the course
+    course = db.query(Course).filter(Course.id == course_id).first()
+    if not course:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Course not found"
+        )
+    
+    # Check if user has access (professor or enrolled student)
+    if current_user.identity == 'student':
+        if course not in current_user.enrolled_courses:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You must be enrolled in this course to view assignments"
+            )
+    
     assignments = db.query(Assignment).filter(Assignment.course_id == course_id).all()
     return [AssignmentResponse.from_orm(assignment) for assignment in assignments]
 
@@ -80,3 +96,58 @@ async def get_assignment(
         )
     
     return AssignmentResponse.from_orm(assignment)
+
+
+@router.put("/{assignment_id}", response_model=AssignmentResponse)
+async def update_assignment(
+    assignment_id: int,
+    assignment_data: AssignmentCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_professor)
+):
+    """
+    Update an assignment (professor who owns the course only)
+    """
+    assignment = db.query(Assignment).filter(Assignment.id == assignment_id).first()
+    if not assignment:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Assignment not found"
+        )
+    
+    # Professors can edit any assignment (admin privileges)
+    # No ownership check needed
+    
+    # Update fields
+    assignment.assignment_name = assignment_data.assignment_name
+    assignment.description = assignment_data.description
+    
+    db.commit()
+    db.refresh(assignment)
+    
+    return AssignmentResponse.from_orm(assignment)
+
+
+@router.delete("/{assignment_id}", status_code=status.HTTP_200_OK)
+async def delete_assignment(
+    assignment_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_professor)
+):
+    """
+    Delete an assignment (professor who owns the course only)
+    """
+    assignment = db.query(Assignment).filter(Assignment.id == assignment_id).first()
+    if not assignment:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Assignment not found"
+        )
+    
+    # Professors can delete any assignment (admin privileges)
+    # No ownership check needed
+    
+    db.delete(assignment)
+    db.commit()
+    
+    return {"message": "Assignment deleted successfully"}

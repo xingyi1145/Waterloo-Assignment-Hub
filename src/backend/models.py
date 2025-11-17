@@ -12,8 +12,16 @@ from .database import Base
 user_courses = Table(
     'user_courses',
     Base.metadata,
-    Column('user_id', Integer, ForeignKey('users.id')),
-    Column('course_id', Integer, ForeignKey('courses.id'))
+    Column('user_id', Integer, ForeignKey('users.id', ondelete='CASCADE')),
+    Column('course_id', Integer, ForeignKey('courses.id', ondelete='CASCADE'))
+)
+
+# Association table for solution likes (track which users liked which solutions)
+user_solution_likes = Table(
+    'user_solution_likes',
+    Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.id', ondelete='CASCADE'), primary_key=True),
+    Column('solution_id', Integer, ForeignKey('solutions.id', ondelete='CASCADE'), primary_key=True)
 )
 
 
@@ -31,6 +39,7 @@ class User(Base):
     enrolled_courses = relationship("Course", secondary=user_courses, back_populates="enrolled_students")
     created_courses = relationship("Course", back_populates="creator", foreign_keys="Course.creator_id")
     solutions = relationship("Solution", back_populates="submitter")
+    liked_solutions = relationship("Solution", secondary=user_solution_likes, back_populates="liked_by_users")
 
 
 class Course(Base):
@@ -108,6 +117,7 @@ class Solution(Base):
     question = relationship("Question", back_populates="solutions")
     submitter = relationship("User", back_populates="solutions")
     comments = relationship("Comment", back_populates="solution", cascade="all, delete-orphan")
+    liked_by_users = relationship("User", secondary="user_solution_likes", back_populates="liked_solutions")
 
 
 class Comment(Base):

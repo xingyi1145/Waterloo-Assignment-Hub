@@ -82,3 +82,59 @@ async def get_question(
         )
     
     return QuestionResponse.from_orm(question)
+
+
+@router.put("/{question_id}", response_model=QuestionResponse)
+async def update_question(
+    question_id: int,
+    question_data: QuestionCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_professor)
+):
+    """
+    Update a question (professor who owns the course only)
+    """
+    question = db.query(Question).filter(Question.id == question_id).first()
+    if not question:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Question not found"
+        )
+    
+    # Professors can edit any question (admin privileges)
+    # No ownership check needed
+    
+    # Update fields
+    question.title = question_data.title
+    question.description = question_data.description
+    question.difficulty = question_data.difficulty
+    
+    db.commit()
+    db.refresh(question)
+    
+    return QuestionResponse.from_orm(question)
+
+
+@router.delete("/{question_id}", status_code=status.HTTP_200_OK)
+async def delete_question(
+    question_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_professor)
+):
+    """
+    Delete a question (professor who owns the course only)
+    """
+    question = db.query(Question).filter(Question.id == question_id).first()
+    if not question:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Question not found"
+        )
+    
+    # Professors can delete any question (admin privileges)
+    # No ownership check needed
+    
+    db.delete(question)
+    db.commit()
+    
+    return {"message": "Question deleted successfully"}

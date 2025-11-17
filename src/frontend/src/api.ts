@@ -93,6 +93,17 @@ class ApiClient {
     return this.request(`/courses/${courseId}/enroll`, { method: 'POST' });
   }
 
+  async updateCourse(id: number, data: Partial<CourseCreate>): Promise<Course> {
+    return this.request<Course>(`/courses/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteCourse(id: number): Promise<{ message: string }> {
+    return this.request(`/courses/${id}`, { method: 'DELETE' });
+  }
+
   // Assignments
   async getAssignmentsByCourse(courseId: number): Promise<Assignment[]> {
     return this.request<Assignment[]>(`/assignments/course/${courseId}`);
@@ -109,6 +120,17 @@ class ApiClient {
     });
   }
 
+  async updateAssignment(id: number, data: Partial<AssignmentCreate>): Promise<Assignment> {
+    return this.request<Assignment>(`/assignments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteAssignment(id: number): Promise<{ message: string }> {
+    return this.request(`/assignments/${id}`, { method: 'DELETE' });
+  }
+
   // Questions
   async getQuestionsByAssignment(assignmentId: number): Promise<Question[]> {
     return this.request<Question[]>(`/questions/assignment/${assignmentId}`);
@@ -123,6 +145,17 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify(data),
     });
+  }
+
+  async updateQuestion(id: number, data: Partial<QuestionCreate>): Promise<Question> {
+    return this.request<Question>(`/questions/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteQuestion(id: number): Promise<{ message: string }> {
+    return this.request(`/questions/${id}`, { method: 'DELETE' });
   }
 
   // Solutions
@@ -143,6 +176,10 @@ class ApiClient {
 
   async likeSolution(solutionId: number): Promise<{ message: string; likes: number }> {
     return this.request(`/solutions/${solutionId}/like`, { method: 'POST' });
+  }
+
+  async deleteSolution(id: number): Promise<{ message: string }> {
+    return this.request(`/solutions/${id}`, { method: 'DELETE' });
   }
 
   async getComments(solutionId: number): Promise<Comment[]> {

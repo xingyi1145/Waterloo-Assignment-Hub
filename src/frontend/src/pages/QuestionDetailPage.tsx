@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiClient } from '../api';
-import type { Question, Solution } from '../types';
+import { useAuth } from '../AuthContext';
+import type { Question, Solution, User } from '../types';
 
 export const QuestionDetailPage = () => {
   const { questionId } = useParams<{ questionId: string }>();
@@ -9,6 +10,7 @@ export const QuestionDetailPage = () => {
   const [solutions, setSolutions] = useState<Solution[]>([]);
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const { user, isProfessor } = useAuth();
 
   useEffect(() => {
     if (questionId) {
@@ -28,6 +30,19 @@ export const QuestionDetailPage = () => {
       alert(err instanceof Error ? err.message : 'Failed to load question');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDeleteSolution = async (solutionId: number) => {
+    if (!confirm('Are you sure you want to delete this solution? This will also delete all comments.')) {
+      return;
+    }
+    try {
+      await apiClient.deleteSolution(solutionId);
+      alert('Solution deleted successfully');
+      if (question) loadQuestionData(question.id);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to delete solution');
     }
   };
 
@@ -71,25 +86,39 @@ export const QuestionDetailPage = () => {
         <h3>Solutions ({solutions.length})</h3>
         <div className="solutions-list">
           {solutions.map((solution) => (
-            <Link
-              key={solution.id}
-              to={`/solutions/${solution.id}`}
-              className="solution-item"
-            >
-              <div className="solution-header">
-                <span className="solution-language">{solution.language}</span>
-                <span className={`solution-status status-${solution.status}`}>
-                  {solution.status}
+            <div key={solution.id} className="solution-item-wrapper">
+              <Link
+                to={`/solutions/${solution.id}`}
+                className="solution-item"
+              >
+                <div className="solution-header">
+                  <span className="solution-language">{solution.language}</span>
+                  <span className={`solution-status status-${solution.status}`}>
+                    {solution.status}
+                  </span>
+                  <span className="solution-likes">❤️ {solution.likes}</span>
+                </div>
+                <code className="solution-preview">
+                  {solution.code.substring(0, 100)}...
+                </code>
+                <span className="solution-date">
+                  {new Date(solution.created_at).toLocaleString()}
                 </span>
-                <span className="solution-likes">❤️ {solution.likes}</span>
-              </div>
-              <code className="solution-preview">
-                {solution.code.substring(0, 100)}...
-              </code>
-              <span className="solution-date">
-                {new Date(solution.created_at).toLocaleString()}
-              </span>
-            </Link>
+              </Link>
+              {(isProfessor || (user && solution.submitter_id === user.id)) && (
+                <div className="solution-actions">
+                  <button
+                    className="btn btn-sm btn-danger"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDeleteSolution(solution.id);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
+            </div>
           ))}
         </div>
 

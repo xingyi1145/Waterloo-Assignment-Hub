@@ -33,6 +33,7 @@ export interface Course {
   description?: string;
   creator_id: number;
   created_at: string;
+  is_enrolled?: boolean;
 }
 
 export interface CourseCreate {
