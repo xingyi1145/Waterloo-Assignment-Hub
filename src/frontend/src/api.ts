@@ -7,12 +7,10 @@ import type {
   User,
   Course,
   CourseCreate,
-  Assignment,
-  AssignmentCreate,
-  Question,
-  QuestionCreate,
-  Solution,
-  SolutionCreate,
+  Topic,
+  TopicCreate,
+  StudyNote,
+  StudyNoteCreate,
   Comment,
   CommentCreate,
 } from './types';
@@ -104,90 +102,64 @@ class ApiClient {
     return this.request(`/courses/${id}`, { method: 'DELETE' });
   }
 
-  // Assignments
-  async getAssignmentsByCourse(courseId: number): Promise<Assignment[]> {
-    return this.request<Assignment[]>(`/assignments/course/${courseId}`);
+  // Topics (formerly Assignments)
+  async getTopicsByCourse(courseId: number): Promise<Topic[]> {
+    return this.request<Topic[]>(`/topics/course/${courseId}`);
   }
 
-  async getAssignment(id: number): Promise<Assignment> {
-    return this.request<Assignment>(`/assignments/${id}`);
+  async getTopic(id: number): Promise<Topic> {
+    return this.request<Topic>(`/topics/${id}`);
   }
 
-  async createAssignment(data: AssignmentCreate): Promise<Assignment> {
-    return this.request<Assignment>('/assignments/', {
+  async createTopic(data: TopicCreate): Promise<Topic> {
+    return this.request<Topic>('/topics/', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
 
-  async updateAssignment(id: number, data: Partial<AssignmentCreate>): Promise<Assignment> {
-    return this.request<Assignment>(`/assignments/${id}`, {
+  async updateTopic(id: number, data: Partial<TopicCreate>): Promise<Topic> {
+    return this.request<Topic>(`/topics/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
   }
 
-  async deleteAssignment(id: number): Promise<{ message: string }> {
-    return this.request(`/assignments/${id}`, { method: 'DELETE' });
+  async deleteTopic(id: number): Promise<{ message: string }> {
+    return this.request(`/topics/${id}`, { method: 'DELETE' });
   }
 
-  // Questions
-  async getQuestionsByAssignment(assignmentId: number): Promise<Question[]> {
-    return this.request<Question[]>(`/questions/assignment/${assignmentId}`);
+  // Study Notes (formerly Questions/Solutions)
+  async getNotesByTopic(topicId: number): Promise<StudyNote[]> {
+    return this.request<StudyNote[]>(`/notes/topic/${topicId}`);
   }
 
-  async getQuestion(id: number): Promise<Question> {
-    return this.request<Question>(`/questions/${id}`);
+  async getNote(id: number): Promise<StudyNote> {
+    return this.request<StudyNote>(`/notes/${id}`);
   }
 
-  async createQuestion(data: QuestionCreate): Promise<Question> {
-    return this.request<Question>('/questions/', {
+  async createNote(data: StudyNoteCreate): Promise<StudyNote> {
+    return this.request<StudyNote>('/notes/', {
       method: 'POST',
       body: JSON.stringify(data),
     });
   }
-
-  async updateQuestion(id: number, data: Partial<QuestionCreate>): Promise<Question> {
-    return this.request<Question>(`/questions/${id}`, {
-      method: 'PUT',
-      body: JSON.stringify(data),
-    });
+  
+  async likeNote(id: number): Promise<{ message: string; likes: number }> {
+    return this.request<{ message: string; likes: number }>(`/notes/${id}/like`, { method: 'POST' });
+  }
+  
+  async deleteNote(id: number): Promise<{ message: string }> {
+    return this.request(`/notes/${id}`, { method: 'DELETE' });
   }
 
-  async deleteQuestion(id: number): Promise<{ message: string }> {
-    return this.request(`/questions/${id}`, { method: 'DELETE' });
+  // Comments
+  async getComments(noteId: number): Promise<Comment[]> {
+    return this.request<Comment[]>(`/notes/${noteId}/comments`);
   }
 
-  // Solutions
-  async getSolutionsByQuestion(questionId: number): Promise<Solution[]> {
-    return this.request<Solution[]>(`/solutions/question/${questionId}`);
-  }
-
-  async getSolution(id: number): Promise<Solution> {
-    return this.request<Solution>(`/solutions/${id}`);
-  }
-
-  async submitSolution(data: SolutionCreate): Promise<Solution> {
-    return this.request<Solution>('/solutions/', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-  }
-
-  async likeSolution(solutionId: number): Promise<{ message: string; likes: number }> {
-    return this.request(`/solutions/${solutionId}/like`, { method: 'POST' });
-  }
-
-  async deleteSolution(id: number): Promise<{ message: string }> {
-    return this.request(`/solutions/${id}`, { method: 'DELETE' });
-  }
-
-  async getComments(solutionId: number): Promise<Comment[]> {
-    return this.request<Comment[]>(`/solutions/${solutionId}/comments`);
-  }
-
-  async addComment(solutionId: number, data: CommentCreate): Promise<Comment> {
-    return this.request<Comment>(`/solutions/${solutionId}/comments`, {
+  async addComment(noteId: number, data: CommentCreate): Promise<Comment> {
+    return this.request<Comment>(`/notes/${noteId}/comments`, {
       method: 'POST',
       body: JSON.stringify(data),
     });

@@ -1,16 +1,14 @@
-# **Project Charter — Waterloo CS Assignment Hub**
+# **Project Charter — Waterloo CS Study Note Hub**
 
 ## **1. Project Title**
 
-**Waterloo CS Assignment Hub (WCAH)**
+**Waterloo CS Study Note Hub (WCSNH)**
 
 ---
 
 ## **2. Project Overview**
 
-The Waterloo CS Assignment Hub is a web platform designed to help students explore, solve, and share solutions to assignment-style programming problems from University of Waterloo CS courses. Inspired by platforms like LeetCode, this system enables students to practice coding, compare approaches, and learn collaboratively. Professors can publish courses, assignments, and questions, while students can submit solutions and engage with peers through likes and comments.
-
-The platform aims to become a centralized, interactive repository for Waterloo-style programming questions, supporting learning, collaboration, and practice.
+The Waterloo CS Study Note Hub is a peer-to-peer knowledge sharing platform designed to help students organize, share, and find high-quality study materials for University of Waterloo CS courses. Instead of traditional assignment grading, this platform focuses on collaborative learning through shared Markdown-based notes, cheat sheets, and course summaries. Professors can structure courses into topics, while students submit content to help their peers succeed.
 
 ---
 
@@ -18,16 +16,16 @@ The platform aims to become a centralized, interactive repository for Waterloo-s
 
 ### **Primary Goals**
 
-* Provide a clean and interactive website that hosts course-specific assignment questions.
-* Allow students to log in, upload solutions, run testcases, and view peer approaches.
-* Allow professors to create and manage courses, assignments, and questions.
-* Encourage collaborative learning via solution ranking, likes, and comments.
+* Provide a centralized repository for student-generated study materials.
+* Allow students to write and view rich text notes using Markdown.
+* Organize content hierarchically: Courses -> Topics -> Study Notes.
+* Encourage quality content through a community feedback system (likes & comments).
 
 ### **Secondary Goals**
 
-* Build an extensible backend that mirrors real platforms like LeetCode.
+* Foster a collaborative study environment.
 * Create a modern, scalable full-stack project suitable for portfolio use.
-* Allow integration with future features (auto-grading, analytics dashboards, badges).
+* Support various resource types (Cheat Sheets, Summaries, Guides).
 
 ---
 
@@ -37,19 +35,17 @@ The platform aims to become a centralized, interactive repository for Waterloo-s
 
 * User authentication system (username + password).
 * User roles: **Student** and **Professor**.
-* Course system with enrollments.
-* Assignments and question management.
-* Uploading and storing code solutions.
-* Likes, comments, ranking functionality for solutions.
-* Testcase execution (basic sandbox or mock execution).
-* Clean, intuitive UI for browsing problems and solutions.
+* Course and Topic management.
+* Web-based Markdown editor and renderer for notes.
+* Resource categorization (CheatSheet, Summary, Guide).
+* Recursive comment system or linear discussion threads.
+* "Like" system for curating top resources.
 
-### **Out of Scope (for now)**
+### **Out of Scope**
 
-* True code execution sandbox (e.g., Docker sandbox, security isolation).
-* Integration with official Waterloo systems (LEARN, Marmoset, CS servers).
-* Mobile application.
-* AI-generated hints or solutions.
+* Code execution or auto-grading (removed from previous scope).
+* Plagiarism detection.
+* Integration with official University systems.
 
 ---
 
@@ -57,141 +53,19 @@ The platform aims to become a centralized, interactive repository for Waterloo-s
 
 | Role                | Description                                                 |
 | ------------------- | ----------------------------------------------------------- |
-| **Student Users**   | Browse questions, upload solutions, engage with others.     |
-| **Professor Users** | Create courses, assignments, and questions. Manage content. |
+| **Student Users**   | Create notes, browse topics, rate content.                  |
+| **Professor Users** | Create courses and topics. moderate content.                |
 | **Developer (You)** | Builds and maintains the platform.                          |
 
 ---
 
-## **6. System Overview / High-Level Features**
+## **6. System Overview / Experience**
 
-### **User Class**
+### **Core Workflows**
 
-Attributes:
+1.  **Professor** creates a Course (e.g., "CS 137") and adds Topics (e.g., "Pointers", "Recursion").
+2.  **Student** enrolls in the course.
+3.  **Student** navigates to "Recursion" and clicks "Create Note".
+4.  **Student** writes a "Recursion Cheat Sheet" in Markdown and tags it as a CheatSheet.
+5.  **Other Students** view the note, find it helpful, and leave a "Like" or a clarifying comment.
 
-* `username`
-* `passwordHash`
-* `identity` (student / professor)
-* `enrolledCourses` (list of course IDs)
-
-Functionality:
-
-* Students: read problems, view solutions, upload code.
-* Professors: all student features **+** create courses/assignments/questions.
-
----
-
-### **Course**
-
-Attributes:
-
-* `courseId`
-* `courseName`
-* `assignments` (list of assignment IDs)
-
-Features:
-
-* Professors create and manage.
-* Students enroll and access content.
-
----
-
-### **Assignment**
-
-Attributes:
-
-* `assignmentName`
-* `questions` (list of question IDs)
-
----
-
-### **Question**
-
-Attributes:
-
-* `questionId`
-* `description`
-* `testcases` (input/output)
-* `solutions` (list of solution IDs)
-
----
-
-### **Solution**
-
-Attributes:
-
-* `code`
-* `submitter` (User reference)
-* `likes`
-* `comments`
-* `rank` (based on likes or judge metrics)
-* `tests` (testcase results)
-
-Features:
-
-* Like and comment
-* Ranking leaderboard
-
----
-
-## **7. Technical Approach**
-
-### **Frontend**
-
-* React / Next.js
-* Tailwind or Material UI
-* Dynamic pages for courses, assignments, problems, and solution viewing
-
-### **Backend**
-
-* Node.js / Express OR Django / Python
-* REST or GraphQL API
-* Authentication (JWT)
-
-### **Database**
-
-* PostgreSQL or MongoDB
-* ORM: Prisma / Mongoose / SQLAlchemy
-
-### **Deployment**
-
-* Vercel or Netlify (frontend)
-* Render/Railway/Heroku (backend)
-* Supabase or Planetscale (database)
-
-Future infrastructure: Docker microservices, sandboxed code execution.
-
----
-
-## **8. Risks & Constraints**
-
-| Risk                                | Mitigation                                                     |
-| ----------------------------------- | -------------------------------------------------------------- |
-| Academic integrity concerns         | Host only *original* questions or publicly available problems. |
-| Security of code execution          | Use mocked testcases first; expand to isolated sandbox later.  |
-| Feature creep                       | Prioritize core features first.                                |
-| User authentication vulnerabilities | Follow modern secure authentication practices.                 |
-
----
-
-## **9. Timeline (High-Level)**
-
-| Phase                                    | Duration  | Deliverables                        |
-| ---------------------------------------- | --------- | ----------------------------------- |
-| **1. Planning & Design**                 | 1–2 weeks | System design, schemas, UI mockups  |
-| **2. Authentication + User Roles**       | 1–2 weeks | Login, signup, role-based behaviour |
-| **3. Course/Assignment/Question System** | 2–3 weeks | CRUD + browse UI                    |
-| **4. Solution Uploading + Viewing**      | 2–3 weeks | Code submission, likes/comments     |
-| **5. Testcase Execution (Mock)**         | 1 week    | Basic evaluation & feedback flow    |
-| **6. Deployment + Polishing**            | Ongoing   | Hosted version + documentation      |
-
----
-
-## **10. Success Criteria**
-
-* Users can sign up and log in securely.
-* Professors can create courses and assignments.
-* Students can browse questions and upload solutions.
-* Solutions can be liked, commented, and ranked.
-* The site is responsive, stable, and intuitive.
-* The project demonstrates full-stack engineering skills suitable for co-op/job applications.

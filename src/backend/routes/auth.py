@@ -12,6 +12,15 @@ from ..auth import get_password_hash, verify_password, create_access_token, get_
 router = APIRouter()
 
 
+@router.options("/signup")
+async def signup_options():
+    """
+    Explicit OPTIONS handler for CORS preflight
+    Prevents FastAPI from trying to validate request body on OPTIONS
+    """
+    return {}
+
+
 @router.post("/signup", response_model=Token, status_code=status.HTTP_201_CREATED)
 async def signup(user_data: UserCreate, db: Session = Depends(get_db)):
     """

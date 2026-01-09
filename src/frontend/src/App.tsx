@@ -2,14 +2,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './AuthContext';
 import { ProtectedRoute } from './ProtectedRoute';
 import { Navbar } from './components/Navbar';
-import { HomePage } from './pages/HomePage';
 import { LoginPage } from './pages/LoginPage';
 import { SignupPage } from './pages/SignupPage';
 import { CoursesPage } from './pages/CoursesPage';
 import { CourseDetailPage } from './pages/CourseDetailPage';
-import { AssignmentDetailPage } from './pages/AssignmentDetailPage';
-import { QuestionDetailPage } from './pages/QuestionDetailPage';
-import { SolutionDetailPage } from './pages/SolutionDetailPage';
+import { TopicDetailPage } from './pages/TopicDetailPage';
+import { NoteDetailPage } from './pages/NoteDetailPage';
 import './App.css';
 
 function App() {
@@ -40,30 +38,22 @@ function App() {
                 }
               />
               <Route
-                path="/assignments/:assignmentId"
+                path="/topics/:topicId"
                 element={
                   <ProtectedRoute>
-                    <AssignmentDetailPage />
+                    <TopicDetailPage />
                   </ProtectedRoute>
                 }
               />
               <Route
-                path="/questions/:questionId"
+                path="/notes/:noteId"
                 element={
                   <ProtectedRoute>
-                    <QuestionDetailPage />
+                    <NoteDetailPage />
                   </ProtectedRoute>
                 }
               />
-              <Route
-                path="/solutions/:solutionId"
-                element={
-                  <ProtectedRoute>
-                    <SolutionDetailPage />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/courses" replace />} />
             </Routes>
           </main>
         </div>

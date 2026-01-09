@@ -24,7 +24,7 @@
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 2rem;
   display: flex;
@@ -67,7 +67,7 @@
 
 /* Container */
 .container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -317,43 +317,100 @@
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-top: 2rem;
+  gap: 2rem;
 }
 
 .course-card {
   background: white;
-  border: 1px solid #e1e8ed;
-  border-radius: 8px;
   padding: 1.5rem;
-  transition: box-shadow 0.2s;
-}
-
-.course-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .course-card h3 {
   margin: 0 0 0.5rem 0;
   color: #3498db;
-  font-size: 1.5rem;
 }
 
 .course-card h4 {
   margin: 0 0 1rem 0;
   color: #2c3e50;
-  font-weight: normal;
+  font-weight: 500;
 }
 
 .course-card p {
   color: #7f8c8d;
   margin-bottom: 1.5rem;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-actions {
   display: flex;
   gap: 0.5rem;
+  margin-top: auto;
 }
+
+/* Split Layout for Question Page */
+.split-layout {
+  display: flex;
+  gap: 2rem;
+  height: calc(100vh - 100px); /* Adjust based on navbar height */
+  overflow: hidden;
+  width: 100%;
+}
+
+.left-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 1rem;
+  border-right: 1px solid #eee;
+  min-width: 0; /* Prevents flex item from overflowing */
+}
+
+.right-panel {
+  flex: 1;
+  overflow-y: auto;
+  padding-left: 1rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  min-width: 0; /* Prevents flex item from overflowing */
+}
+
+.solution-code pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background: #2c3e50;
+  color: #ecf0f1;
+  padding: 1rem;
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.solution-item-wrapper {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.solution-item-wrapper:hover {
+  background-color: #f0f2f5;
+}
+
+.solution-item-wrapper.active {
+  background-color: #e3f2fd;
+  border-left: 4px solid #3498db;
+}
+
 
 /* Enrollment Badge */
 .enrollment-badge {
