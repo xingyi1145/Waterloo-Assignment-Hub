@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from .database import init_db
-from .routes import auth, courses, assignments, questions, solutions
+from .routes import auth, courses, topics, notes
 
 
 @asynccontextmanager
@@ -35,9 +35,8 @@ app.add_middleware(
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(courses.router, prefix="/api/courses", tags=["Courses"])
-app.include_router(assignments.router, prefix="/api/assignments", tags=["Assignments"])
-app.include_router(questions.router, prefix="/api/questions", tags=["Questions"])
-app.include_router(solutions.router, prefix="/api/solutions", tags=["Solutions"])
+app.include_router(topics.router, prefix="/api/topics", tags=["Topics"])
+app.include_router(notes.router, prefix="/api/notes", tags=["Notes"])
 
 
 @app.get("/")

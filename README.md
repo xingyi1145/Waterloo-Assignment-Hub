@@ -1,13 +1,13 @@
 # Waterloo CS Assignment Hub
 
-A full-stack web application for CS course assignments, practice questions, and solution sharing.
+A full-stack web application for sharing CS study notes, summaries, and guides in Markdown format.
 
 ## Quick Start
 
 ### One-Command Launch
 
 ```bash
-python3 start.py
+python3 fix_and_start.py
 ```
 
 That's it! The script automatically:
@@ -43,9 +43,8 @@ cs137-web-app/
 │   │   └── routes/           # API route modules
 │   │       ├── auth.py       # Authentication endpoints
 │   │       ├── courses.py    # Course management
-│   │       ├── assignments.py
-│   │       ├── questions.py
-│   │       └── solutions.py
+│   │       ├── topics.py     # Topic management
+│   │       └── notes.py      # Study notes & comments
 │   ├── frontend/             # React + TypeScript frontend
 │   │   └── src/
 │   │       ├── api.ts        # Type-safe API client
@@ -61,9 +60,7 @@ cs137-web-app/
 │   ├── Charter.md            # Project charter
 │   └── DATABASE.md           # Database schema documentation
 ├── wcah.db                   # SQLite database file
-├── start.py                  # Main launcher script
-├── fix_and_start.py          # Complete fix & restart script
-├── test_and_fix.py           # Diagnostic tool
+├── fix_and_start.py          # Main launcher script
 ├── requirements.txt          # Python dependencies
 └── README.md                 # This file
 ```
@@ -82,6 +79,7 @@ cs137-web-app/
 - TypeScript 5.9.3 - Type-safe JavaScript
 - Vite 4.5.14 - Lightning-fast build tool
 - React Router 6.30.2 - Client-side routing
+- React Markdown - Markdown rendering for notes
 
 ## Features
 

@@ -1,4 +1,4 @@
-# 🔧 Troubleshooting Guide
+# Troubleshooting Guide
 
 ## "Cannot connect to server" Error
 
@@ -136,25 +136,6 @@ python scripts/backup_database.py backup
 
 ---
 
-## Run Diagnostics
-
-### Test everything
-```bash
-python3 test_and_fix.py
-```
-
-This checks:
-- ✓ Backend health
-- ✓ CORS configuration
-- ✓ Authentication
-- ✓ Database
-- ✓ Frontend server
-
-### Browser test
-Open `test-connection.html` in browser for interactive testing
-
----
-
 ## Still Having Issues?
 
 ### 1. Check logs
@@ -196,7 +177,7 @@ python3 fix_and_start.py
 
 ### Start app
 ```bash
-python3 start.py
+python3 fix_and_start.py
 ```
 
 ### Stop app
@@ -216,5 +197,3 @@ pkill -f uvicorn && pkill -f vite
 - Student: `alice` / `password123`
 
 ---
-
-**Still stuck?** Check the full README.md or run the diagnostic tool.

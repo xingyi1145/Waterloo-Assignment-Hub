@@ -1,10 +1,10 @@
-# 🚀 Quick Start Guide
+# Quick Start Guide
 
 ## Run the App in 3 Steps
 
 ### 1. Start Everything
 ```bash
-python3 start.py
+python3 fix_and_start.py
 ```
 
 ### 2. Open Browser
@@ -14,7 +14,7 @@ Go to: **http://localhost:5173**
 - Username: `alice` or `prof_smith`
 - Password: `password123`
 
-That's it! 🎉
+That's it!
 
 ---
 
@@ -46,10 +46,10 @@ pkill -f uvicorn && pkill -f vite
 
 ## What You Get
 
-- ✅ Backend API: http://localhost:8000
-- ✅ Frontend App: http://localhost:5173  
-- ✅ API Docs: http://localhost:8000/docs
-- ✅ Sample database with users and courses
+- Backend API: http://localhost:8000
+- Frontend App: http://localhost:5173  
+- API Docs: http://localhost:8000/docs
+- Sample database with users and courses
 
 ---
 
@@ -57,4 +57,3 @@ pkill -f uvicorn && pkill -f vite
 
 - Full docs: See `README.md`
 - Troubleshooting: See `SOLUTION.md`
-- Test connection: Run `python3 test_and_fix.py`

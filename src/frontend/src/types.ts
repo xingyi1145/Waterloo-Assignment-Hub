@@ -42,62 +42,51 @@ export interface CourseCreate {
   description?: string;
 }
 
-export interface Assignment {
+export interface Topic {
   id: number;
-  assignment_name: string;
+  title: string;
   description?: string;
   course_id: number;
   created_at: string;
 }
 
-export interface AssignmentCreate {
-  assignment_name: string;
+export interface TopicCreate {
+  title: string;
   description?: string;
   course_id: number;
 }
 
-export interface Question {
+export type ResourceType = 'CheatSheet' | 'Summary' | 'Guide';
+
+export interface StudyNote {
   id: number;
   title: string;
-  description: string;
-  difficulty?: 'easy' | 'medium' | 'hard';
-  assignment_id: number;
+  content: string; // Markdown
+  summary?: string;
+  resource_type: ResourceType;
+  topic_id: number;
+  author_id: number;
+  likes_count: number;
   created_at: string;
 }
 
-export interface QuestionCreate {
+export interface StudyNoteCreate {
+  topic_id: number;
   title: string;
-  description: string;
-  difficulty?: 'easy' | 'medium' | 'hard';
-  assignment_id: number;
-}
-
-export interface Solution {
-  id: number;
-  question_id: number;
-  submitter_id: number;
-  code: string;
-  language: string;
-  status: string;
-  likes: number;
-  created_at: string;
-}
-
-export interface SolutionCreate {
-  question_id: number;
-  code: string;
-  language: string;
+  content: string;
+  summary?: string;
+  resource_type: ResourceType;
 }
 
 export interface Comment {
   id: number;
-  solution_id: number;
+  note_id: number;
   user_id: number;
   content: string;
   created_at: string;
 }
 
 export interface CommentCreate {
-  solution_id: number;
+  note_id: number;
   content: string;
 }

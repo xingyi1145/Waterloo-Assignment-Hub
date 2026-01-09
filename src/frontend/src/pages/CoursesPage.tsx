@@ -39,7 +39,7 @@ export const CoursesPage = () => {
   };
 
   const handleDelete = async (courseId: number, courseName: string) => {
-    if (!confirm(`Are you sure you want to delete "${courseName}"? This will also delete all assignments, questions, and solutions.`)) {
+    if (!confirm(`Are you sure you want to delete "${courseName}"? This will also delete all topics and study notes.`)) {
       return;
     }
     try {

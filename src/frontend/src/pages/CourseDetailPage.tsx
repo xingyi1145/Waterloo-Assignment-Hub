@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { apiClient } from '../api';
 import { useAuth } from '../AuthContext';
-import type { Course, Assignment } from '../types';
+import type { Course, Topic } from '../types';
 
 export const CourseDetailPage = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const [course, setCourse] = useState<Course | null>(null);
-  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [editingAssignment, setEditingAssignment] = useState<Assignment | null>(null);
+  const [editingTopic, setEditingTopic] = useState<Topic | null>(null);
   const [error, setError] = useState('');
   const { isProfessor } = useAuth();
 
@@ -25,14 +25,13 @@ export const CourseDetailPage = () => {
       const courseData = await apiClient.getCourse(id);
       setCourse(courseData);
       
-      // Only load assignments if enrolled or professor
+      // Only load topics if enrolled or professor
       if (courseData.is_enrolled) {
         try {
-          const assignmentsData = await apiClient.getAssignmentsByCourse(id);
-          setAssignments(assignmentsData);
+          const topicsData = await apiClient.getTopicsByCourse(id);
+          setTopics(topicsData);
         } catch (err) {
-          // If not enrolled, this will error - that's expected
-          console.log('Could not load assignments:', err);
+          console.log('Could not load topics:', err);
         }
       }
     } catch (err) {
@@ -47,23 +46,22 @@ export const CourseDetailPage = () => {
     try {
       await apiClient.enrollInCourse(course.id);
       alert('Successfully enrolled in course!');
-      // Reload course data
       loadCourseData(course.id);
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to enroll');
     }
   };
 
-  const handleDeleteAssignment = async (assignmentId: number, assignmentName: string) => {
-    if (!confirm(`Are you sure you want to delete "${assignmentName}"? This will also delete all questions and solutions.`)) {
+  const handleDeleteTopic = async (topicId: number, topicTitle: string) => {
+    if (!confirm(`Are you sure you want to delete "${topicTitle}"? This will also delete all notes within it.`)) {
       return;
     }
     try {
-      await apiClient.deleteAssignment(assignmentId);
-      alert('Assignment deleted successfully');
+      await apiClient.deleteTopic(topicId);
+      alert('Topic deleted successfully');
       if (course) loadCourseData(course.id);
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete assignment');
+      alert(err instanceof Error ? err.message : 'Failed to delete topic');
     }
   };
 
@@ -86,15 +84,14 @@ export const CourseDetailPage = () => {
             className="btn btn-primary"
             onClick={() => setShowCreateForm(!showCreateForm)}
           >
-            {showCreateForm ? 'Cancel' : 'Create Assignment'}
+            {showCreateForm ? 'Cancel' : 'Create Topic'}
           </button>
         )}
       </div>
 
-      {/* Show enroll button for students not enrolled */}
       {!isProfessor && !course.is_enrolled && (
         <div className="enrollment-prompt">
-          <p>You need to enroll in this course to view assignments and submit solutions.</p>
+          <p>You need to enroll in this course to view topics and study notes.</p>
           <button className="btn btn-primary" onClick={handleEnroll}>
             Enroll in Course
           </button>
@@ -102,7 +99,7 @@ export const CourseDetailPage = () => {
       )}
 
       {showCreateForm && (
-        <CreateAssignmentForm
+        <CreateTopicForm
           courseId={course.id}
           onSuccess={() => {
             setShowCreateForm(false);
@@ -111,42 +108,40 @@ export const CourseDetailPage = () => {
         />
       )}
 
-      {editingAssignment && (
-        <EditAssignmentForm
-          assignment={editingAssignment}
+      {editingTopic && (
+        <EditTopicForm
+          topic={editingTopic}
           onSuccess={() => {
-            setEditingAssignment(null);
+            setEditingTopic(null);
             loadCourseData(course.id);
           }}
-          onCancel={() => setEditingAssignment(null)}
+          onCancel={() => setEditingTopic(null)}
         />
       )}
 
-      {/* Only show assignments if enrolled or professor */}
       {course.is_enrolled && (
         <>
-          <h3>Assignments</h3>
-          <div className="assignments-list">
-            {assignments.map((assignment) => (
-              <div key={assignment.id} className="assignment-item-wrapper">
+          <h3>Topics</h3>
+          <div className="topics-list">
+            {topics.map((topic) => (
+              <div key={topic.id} className="topic-item-wrapper" style={{marginBottom: '10px', background: '#f9f9f9', padding: '10px', borderRadius: '5px'}}>
                 <Link
-                  to={`/assignments/${assignment.id}`}
-                  className="assignment-item"
+                  to={`/topics/${topic.id}`}
+                  className="topic-item"
+                  style={{display: 'block', textDecoration: 'none', color: '#333'}}
                 >
-                  <h4>{assignment.assignment_name}</h4>
-                  {assignment.description && <p>{assignment.description}</p>}
-                  <span className="assignment-date">
-                    Created: {new Date(assignment.created_at).toLocaleDateString()}
-                  </span>
+                  <h4 style={{margin: '0 0 5px'}}>{topic.title}</h4>
+                  {topic.description && <p style={{margin: '0', fontSize: '0.9em', color: '#666'}}>{topic.description}</p>}
                 </Link>
                 {isProfessor && (
-                  <div className="assignment-actions">
+                  <div className="topic-actions" style={{marginTop: '10px'}}>
                     <button
                       className="btn btn-sm btn-secondary"
                       onClick={(e) => {
                         e.preventDefault();
-                        setEditingAssignment(assignment);
+                        setEditingTopic(topic);
                       }}
+                      style={{marginRight: '5px'}}
                     >
                       Edit
                     </button>
@@ -154,7 +149,7 @@ export const CourseDetailPage = () => {
                       className="btn btn-sm btn-danger"
                       onClick={(e) => {
                         e.preventDefault();
-                        handleDeleteAssignment(assignment.id, assignment.assignment_name);
+                        handleDeleteTopic(topic.id, topic.title);
                       }}
                     >
                       Delete
@@ -165,10 +160,10 @@ export const CourseDetailPage = () => {
             ))}
           </div>
 
-          {assignments.length === 0 && (
+          {topics.length === 0 && (
             <div className="empty-state">
-              <p>No assignments yet.</p>
-              {isProfessor && <p>Create the first assignment!</p>}
+              <p>No topics yet.</p>
+              {isProfessor && <p>Create the first topic!</p>}
             </div>
           )}
         </>
@@ -177,14 +172,14 @@ export const CourseDetailPage = () => {
   );
 };
 
-const CreateAssignmentForm = ({
+const CreateTopicForm = ({
   courseId,
   onSuccess,
 }: {
   courseId: number;
   onSuccess: () => void;
 }) => {
-  const [name, setName] = useState('');
+  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -193,14 +188,14 @@ const CreateAssignmentForm = ({
     setLoading(true);
 
     try {
-      await apiClient.createAssignment({
-        assignment_name: name,
+      await apiClient.createTopic({
+        title,
         description,
         course_id: courseId,
       });
       onSuccess();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to create assignment');
+      alert(err instanceof Error ? err.message : 'Failed to create topic');
     } finally {
       setLoading(false);
     }
@@ -208,14 +203,15 @@ const CreateAssignmentForm = ({
 
   return (
     <form onSubmit={handleSubmit} className="create-form">
-      <h3>Create New Assignment</h3>
+      <h3>Create New Topic</h3>
       <div className="form-group">
-        <label htmlFor="name">Assignment Name</label>
+        <label htmlFor="title">Topic Title</label>
         <input
-          id="name"
+          id="title"
+          className="form-control"
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           required
         />
       </div>
@@ -223,29 +219,32 @@ const CreateAssignmentForm = ({
         <label htmlFor="description">Description</label>
         <textarea
           id="description"
+          className="form-control"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
         />
       </div>
-      <button type="submit" className="btn btn-primary" disabled={loading}>
-        {loading ? 'Creating...' : 'Create Assignment'}
-      </button>
+      <div className="form-actions">
+        <button type="submit" className="btn btn-primary" disabled={loading}>
+          {loading ? 'Creating...' : 'Create Topic'}
+        </button>
+      </div>
     </form>
   );
 };
 
-const EditAssignmentForm = ({
-  assignment,
+const EditTopicForm = ({
+  topic,
   onSuccess,
   onCancel,
 }: {
-  assignment: Assignment;
+  topic: Topic;
   onSuccess: () => void;
   onCancel: () => void;
 }) => {
-  const [name, setName] = useState(assignment.assignment_name);
-  const [description, setDescription] = useState(assignment.description || '');
+  const [title, setTitle] = useState(topic.title);
+  const [description, setDescription] = useState(topic.description || '');
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -253,30 +252,31 @@ const EditAssignmentForm = ({
     setLoading(true);
 
     try {
-      await apiClient.updateAssignment(assignment.id, {
-        assignment_name: name,
+      await apiClient.updateTopic(topic.id, {
+        title,
         description,
-        course_id: assignment.course_id,
+        course_id: topic.course_id,
       });
-      alert('Assignment updated successfully');
+      alert('Topic updated successfully');
       onSuccess();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to update assignment');
+      alert(err instanceof Error ? err.message : 'Failed to update topic');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="create-form">
-      <h3>Edit Assignment</h3>
+    <form onSubmit={handleSubmit} className="create-form" style={{background: '#f0f0f0', padding: '15px', borderRadius: '5px', marginBottom: '20px'}}>
+      <h3>Edit Topic</h3>
       <div className="form-group">
-        <label htmlFor="editName">Assignment Name</label>
+        <label htmlFor="editTitle">Topic Title</label>
         <input
-          id="editName"
+          id="editTitle"
+          className="form-control"
           type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           required
         />
       </div>
@@ -284,6 +284,7 @@ const EditAssignmentForm = ({
         <label htmlFor="editDescription">Description</label>
         <textarea
           id="editDescription"
+          className="form-control"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           rows={3}
