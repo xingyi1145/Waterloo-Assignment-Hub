@@ -3,26 +3,21 @@
 ## "Cannot connect to server" Error
 
 ### Root Cause
-Your servers are running fine. The error is from **cached browser data** (old expired token in localStorage).
+Typically caused by cached browser data (old tokens) or servers not running, especially after database resets.
 
 ### Solutions
 
-#### Solution 1: Incognito Window (Easiest)
-Open http://localhost:5173 in an **incognito/private window**
-
-#### Solution 2: Clear localStorage
-1. Open the app in browser
-2. Press `F12` (DevTools)
-3. Go to **Console** tab
-4. Type: `localStorage.clear()`
-5. Press Enter
-6. Refresh page (`Ctrl+Shift+R`)
-
-#### Solution 3: Complete Fix
+#### Solution 1: Complete Fix (Recommended)
+This script re-installs dependencies and restarts everything freshly.
 ```bash
 python3 fix_and_start.py
 ```
-Then open in incognito window
+After running, open http://localhost:5173 (preferably in Incognito/Private mode).
+
+#### Solution 2: Clear localStorage
+1. Open DevTools (`F12`)
+2. Console tab -> Type `localStorage.clear()` -> Enter
+3. Refresh page
 
 ---
 
@@ -34,70 +29,45 @@ Then open in incognito window
 ### Solution
 ```bash
 # Kill existing servers
-pkill -f uvicorn  # Backend
-pkill -f vite     # Frontend
-
-# Or kill specific ports
-fuser -k 8000/tcp
-fuser -k 5173/tcp
-
-# Restart
-python3 start.py
+pkill -f uvicorn
+pkill -f vite
 ```
+Then run `python3 fix_and_start.py` again.
+
+---
+
+## Login Issues
+
+### "User not found" or "Incorrect password"
+If you reset the database manually, the default users might be missing.
+
+**Fix:** Run the seeder manually (if `fix_and_start.py` didn't catch it):
+```bash
+source .venv/bin/activate  # or .venv/Scripts/activate on Windows
+python scripts/seed_database.py
+```
+This restores users: `alice` (student) and `prof_smith` (professor).
 
 ---
 
 ## Backend Not Starting
 
-### Check if running
-```bash
-curl http://localhost:8000/api/health
-```
-
-### View logs
+### Check Logs
 ```bash
 tail -f /tmp/wcah-backend.log
 ```
 
-### Common fixes
-```bash
-# Reinstall dependencies
-source .venv/bin/activate
-pip install -r requirements.txt
-
-# Check database
-ls -lh wcah.db
-
-# Reset database if needed
-rm wcah.db
-python scripts/seed_database.py
-```
+### Common Issues
+- **Missing Database:** Run `python scripts/seed_database.py`
+- **Dependency Mismatch:** Run `pip install -r requirements.txt` (specifically check `bcrypt` version).
 
 ---
 
 ## Frontend Not Starting
 
-### Check if running
-```bash
-curl http://localhost:5173
-```
+### Common Issues
+- **Legacy Peer Deps:** If `npm install` fails, run `npm install --legacy-peer-deps` (handled automatically by `fix_and_start.py`).
 
-### View logs
-```bash
-tail -f /tmp/wcah-frontend.log
-```
-
-### Common fixes
-```bash
-cd src/frontend
-
-# Clear node_modules
-rm -rf node_modules
-npm install
-
-# Clear Vite cache
-rm -rf node_modules/.vite
-```
 
 ---
 

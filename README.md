@@ -1,6 +1,6 @@
-# Waterloo CS Assignment Hub
+# Waterloo CS Study Note Hub
 
-A full-stack web application for sharing CS study notes, summaries, and guides in Markdown format.
+A full-stack web application for sharing CS study notes, summaries, and guides in Markdown format using a Card-based UI.
 
 ## Quick Start
 
@@ -13,7 +13,7 @@ python3 fix_and_start.py
 That's it! The script automatically:
 - Checks prerequisites (Python 3.8+, Node.js 18+)
 - Creates virtual environment if needed
-- Installs all dependencies
+- Installs all dependencies (Backend and Frontend)
 - Sets up and seeds database
 - Starts backend server (port 8000)
 - Starts frontend server (port 5173)
@@ -39,26 +39,16 @@ cs137-web-app/
 │   │   ├── models.py         # SQLAlchemy database models
 │   │   ├── schemas.py        # Pydantic validation schemas
 │   │   ├── auth.py           # JWT authentication
-│   │   ├── database.py       # Database configuration
 │   │   └── routes/           # API route modules
-│   │       ├── auth.py       # Authentication endpoints
-│   │       ├── courses.py    # Course management
 │   │       ├── topics.py     # Topic management
 │   │       └── notes.py      # Study notes & comments
 │   ├── frontend/             # React + TypeScript frontend
 │   │   └── src/
-│   │       ├── api.ts        # Type-safe API client
-│   │       ├── AuthContext.tsx  # Auth state management
-│   │       ├── pages/        # Page components
+│   │       ├── pages/        # Page components (Card View, Split View)
 │   │       └── components/   # Reusable components
-│   └── database/             # Alembic migrations
 ├── scripts/
-│   ├── seed_database.py      # Populate sample data
-│   ├── inspect_database.py   # View database contents
-│   └── backup_database.py    # Backup/restore utility
+│   └── seed_database.py      # Populate sample data
 ├── docs/
-│   ├── Charter.md            # Project charter
-│   └── DATABASE.md           # Database schema documentation
 ├── wcah.db                   # SQLite database file
 ├── fix_and_start.py          # Main launcher script
 ├── requirements.txt          # Python dependencies
@@ -68,34 +58,30 @@ cs137-web-app/
 ## Tech Stack
 
 **Backend:**
-- FastAPI 0.104.1 - Modern, fast Python web framework
-- SQLAlchemy 2.0.23 - SQL toolkit and ORM
+- FastAPI - Modern Python web framework
+- SQLAlchemy - SQL toolkit and ORM
 - SQLite - Lightweight database
-- Alembic 1.12.1 - Database migrations
-- JWT + bcrypt - Secure authentication
+- NoteType Enum - Categorize notes (Summary, Lecture, Code, Other)
 
 **Frontend:**
-- React 18.3.1 - UI library
-- TypeScript 5.9.3 - Type-safe JavaScript
-- Vite 4.5.14 - Lightning-fast build tool
-- React Router 6.30.2 - Client-side routing
-- React Markdown - Markdown rendering for notes
+- React 18 - UI library
+- TypeScript - Type-safe JavaScript
+- React Mde - Split-pane Markdown Editor
+- Showdown - Markdown conversion
+- Card UI - Modern layout for browsing notes
 
 ## Features
 
 ### For Students
-- Browse and enroll in courses
-- View assignments and practice questions
-- Submit code solutions
-- Like and comment on solutions
-- Learn from community solutions
+- **Study Notes:** Create Markdown-rich notes with preview.
+- **Card View:** Browse notes in a visual card layout with topic badges.
+- **Navigation:** Deep link directly to notes with auto-generated Table of Contents.
+- **Engagement:** Like notes and leave comments.
+- **Categorization:** Tag notes as Summary, Lecture, Code, etc.
 
 ### For Professors
-- Create and manage courses
-- Create assignments with questions
-- Define test cases for auto-grading
-- View student enrollments
-- Monitor student activity
+- Create and organize Courses and Topics.
+- Users with 'Professor' role can manage all content.
 
 ## Manual Setup (Advanced)
 

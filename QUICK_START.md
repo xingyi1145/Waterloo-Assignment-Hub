@@ -6,30 +6,32 @@
 ```bash
 python3 fix_and_start.py
 ```
+*Note: This script handles dependencies, database seeding, and server startup automatically.*
 
 ### 2. Open Browser
 Go to: **http://localhost:5173**
 
 ### 3. Login
-- Username: `alice` or `prof_smith`
-- Password: `password123`
+- **Student:** `alice` / `password123`
+- **Professor:** `prof_smith` / `password123`
 
 That's it!
 
 ---
 
-## If You See "Cannot connect to server"
+## Troubleshooting
 
-### Quick Fix (30 seconds)
+### "Cannot connect to server"
+Typically a browser cache issue.
+1. Open in **Incognito/Private** window.
+2. Or clear cache manually: `F12` -> Console -> type `localStorage.clear()` -> Refresh.
 
-**Option A:** Open in incognito/private window
-
-**Option B:** Clear browser cache
-1. Press `F12` (open DevTools)
-2. Console tab
-3. Type: `localStorage.clear()`
-4. Press Enter
-5. Refresh page
+### Database Issues
+If login fails ("User not found"), run:
+```bash
+python scripts/seed_database.py
+```
+(Ensure you are in the virtual environment or use `.venv/bin/python`).
 
 ---
 
@@ -42,18 +44,3 @@ Or run:
 pkill -f uvicorn && pkill -f vite
 ```
 
----
-
-## What You Get
-
-- Backend API: http://localhost:8000
-- Frontend App: http://localhost:5173  
-- API Docs: http://localhost:8000/docs
-- Sample database with users and courses
-
----
-
-## Need More Help?
-
-- Full docs: See `README.md`
-- Troubleshooting: See `SOLUTION.md`

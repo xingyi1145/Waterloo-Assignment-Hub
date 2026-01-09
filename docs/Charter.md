@@ -25,7 +25,7 @@ The Waterloo CS Study Note Hub is a peer-to-peer knowledge sharing platform desi
 
 * Foster a collaborative study environment.
 * Create a modern, scalable full-stack project suitable for portfolio use.
-* Support various resource types (Cheat Sheets, Summaries, Guides).
+* Support various note types (Summary, Lecture, Code, Other).
 
 ---
 
@@ -36,14 +36,14 @@ The Waterloo CS Study Note Hub is a peer-to-peer knowledge sharing platform desi
 * User authentication system (username + password).
 * User roles: **Student** and **Professor**.
 * Course and Topic management.
-* Web-based Markdown editor and renderer for notes.
-* Resource categorization (CheatSheet, Summary, Guide).
-* Recursive comment system or linear discussion threads.
-* "Like" system for curating top resources.
+* **Dual-pane Markdown editor** for creating rich notes.
+* **Card-based UI** for browsing notes within topics.
+* **Table of Contents** sidebar generated automatically from note headers.
+* "Like" system and Comment threads.
 
 ### **Out of Scope**
 
-* Code execution or auto-grading (removed from previous scope).
+* Code execution or auto-grading.
 * Plagiarism detection.
 * Integration with official University systems.
 
@@ -53,7 +53,7 @@ The Waterloo CS Study Note Hub is a peer-to-peer knowledge sharing platform desi
 
 | Role                | Description                                                 |
 | ------------------- | ----------------------------------------------------------- |
-| **Student Users**   | Create notes, browse topics, rate content.                  |
+| **Student Users**   | Create notes (summaries/guides), view card feed, like/comment.|
 | **Professor Users** | Create courses and topics. moderate content.                |
 | **Developer (You)** | Builds and maintains the platform.                          |
 
@@ -64,8 +64,8 @@ The Waterloo CS Study Note Hub is a peer-to-peer knowledge sharing platform desi
 ### **Core Workflows**
 
 1.  **Professor** creates a Course (e.g., "CS 137") and adds Topics (e.g., "Pointers", "Recursion").
-2.  **Student** enrolls in the course.
-3.  **Student** navigates to "Recursion" and clicks "Create Note".
-4.  **Student** writes a "Recursion Cheat Sheet" in Markdown and tags it as a CheatSheet.
-5.  **Other Students** view the note, find it helpful, and leave a "Like" or a clarifying comment.
+2.  **Student** enrolls in the course and selects a Topic.
+3.  **Student** clicks "Create Note", types in Markdown with live preview, and selects "Summary" type.
+4.  **Student** submits note, which appears as a Card with a specialized badge.
+5.  **Peers** click the card, navigate via the TOC sidebar, and leave likes or comments.
 
