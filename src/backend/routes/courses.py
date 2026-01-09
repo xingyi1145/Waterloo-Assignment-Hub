@@ -174,7 +174,7 @@ async def delete_course(
     # Manually delete enrollments using raw SQL to avoid ORM issues
     db.execute(delete(user_courses).where(user_courses.c.course_id == course_id))
     
-    # Now delete the course (cascade will handle assignments, questions, solutions)
+    # Now delete the course (cascade will handle topics and notes)
     db.delete(course)
     db.commit()
     

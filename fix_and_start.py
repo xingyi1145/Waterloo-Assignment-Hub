@@ -44,9 +44,8 @@ def run_command(cmd, description, ignore_errors=False):
 
 def main():
     print(f"{Colors.BOLD}{Colors.BLUE}")
-    print("╔══════════════════════════════════════════════════════════════════╗")
-    print("║         WCAH Complete Fix Script                                ║")
-    print("║         Solving 'Cannot connect to server' issue                ║")
+    print(f"  {Colors.BOLD}WCAH / WCSNH Complete Fix Script                          ║")
+    print(f"║         Solving 'Cannot connect to server' issue                ║")
     print("╚══════════════════════════════════════════════════════════════════╝")
     print(Colors.END)
     
