@@ -12,9 +12,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/showdown": "^2.0.6",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-markdown": "^10.1.0"
+    "react-markdown": "^10.1.0",
+    "react-mde": "^11.5.0",
+    "showdown": "^2.1.0"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",

@@ -79,16 +79,17 @@ class TopicResponse(TopicBase):
 # Study Note Schemas
 from enum import Enum
 
-class ResourceType(str, Enum):
-    CheatSheet = "CheatSheet"
+class NoteType(str, Enum):
     Summary = "Summary"
-    Guide = "Guide"
+    Lecture = "Lecture"
+    Code = "Code"
+    Other = "Other"
 
 class StudyNoteBase(BaseModel):
     title: str = Field(..., max_length=200)
     content: str
     summary: Optional[str] = Field(None, max_length=500)
-    resource_type: ResourceType
+    note_type: NoteType
 
 
 class StudyNoteCreate(StudyNoteBase):
@@ -99,7 +100,7 @@ class StudyNoteResponse(StudyNoteBase):
     id: int
     topic_id: int
     author_id: int
-    likes_count: int
+    likes: int
     created_at: datetime
 
     class Config:

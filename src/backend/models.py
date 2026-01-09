@@ -9,11 +9,12 @@ import enum
 from .database import Base
 
 
-# Enum for resource type
-class ResourceType(str, enum.Enum):
-    CheatSheet = "CheatSheet"
+# Enum for note type
+class NoteType(str, enum.Enum):
     Summary = "Summary"
-    Guide = "Guide"
+    Lecture = "Lecture"
+    Code = "Code"
+    Other = "Other"
 
 
 # Association table for user enrollments
@@ -87,12 +88,12 @@ class StudyNote(Base):
     title = Column(String(200), nullable=False)
     content = Column(Text, nullable=False)  # Markdown content
     summary = Column(String(500), nullable=True)
-    resource_type = Column(Enum(ResourceType), nullable=False)
+    note_type = Column(Enum(NoteType), nullable=False)
     
     topic_id = Column(Integer, ForeignKey('topics.id'), nullable=False)
     author_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     
-    likes_count = Column(Integer, default=0)
+    likes = Column(Integer, default=0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     # Relationships

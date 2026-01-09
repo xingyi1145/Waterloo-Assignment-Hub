@@ -10,7 +10,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from sqlalchemy.orm import Session
 from src.backend.database import SessionLocal, init_db
-from src.backend.models import User, Course, Topic, StudyNote, Comment, ResourceType
+from src.backend.models import User, Course, Topic, StudyNote, Comment, NoteType
 from src.backend.auth import get_password_hash
 
 
@@ -142,17 +142,19 @@ def seed_content(db: Session, courses: dict, users: dict):
             title="Pointer Cheat Sheet",
             content="# Pointer Basics\n\n* `&x` : Address of x\n* `*p` : Value at address p\n\n## Malloc\n`int *arr = malloc(10 * sizeof(int));`",
             summary="Quick reference for pointer syntax",
-            resource_type=ResourceType.CheatSheet,
+            note_type=NoteType.Summary,
             topic_id=pointers_topic.id,
-            author_id=users["alice"].id
+            author_id=users["alice"].id,
+            likes=5
         ),
         StudyNote(
             title="Guide to Memory Leaks",
             content="# Avoiding Leaks\n\nAlways match `malloc` with `free`.\n\n```c\nint *p = malloc(sizeof(int));\nfree(p);\n```",
             summary="Best practices for memory management",
-            resource_type=ResourceType.Guide,
+            note_type=NoteType.Code,
             topic_id=pointers_topic.id,
-            author_id=users["prof_smith"].id
+            author_id=users["prof_smith"].id,
+            likes=12
         )
     ]
     

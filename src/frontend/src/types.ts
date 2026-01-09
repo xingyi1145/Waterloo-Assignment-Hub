@@ -56,17 +56,17 @@ export interface TopicCreate {
   course_id: number;
 }
 
-export type ResourceType = 'CheatSheet' | 'Summary' | 'Guide';
+export type NoteType = 'Summary' | 'Lecture' | 'Code' | 'Other';
 
 export interface StudyNote {
   id: number;
   title: string;
   content: string; // Markdown
   summary?: string;
-  resource_type: ResourceType;
+  note_type: NoteType;
   topic_id: number;
   author_id: number;
-  likes_count: number;
+  likes: number;
   created_at: string;
 }
 
@@ -75,7 +75,7 @@ export interface StudyNoteCreate {
   title: string;
   content: string;
   summary?: string;
-  resource_type: ResourceType;
+  note_type: NoteType;
 }
 
 export interface Comment {

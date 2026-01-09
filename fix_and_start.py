@@ -83,7 +83,7 @@ def main():
     run_command("cd src/frontend && rm -rf dist", "Clearing dist", ignore_errors=True)
     
     print_step(7, "Installing/updating frontend dependencies")
-    run_command("cd src/frontend && npm install --silent", "Installing npm packages")
+    run_command("cd src/frontend && npm install --legacy-peer-deps --silent", "Installing npm packages")
     
     print_step(8, "Starting backend server")
     backend_cmd = ".venv/bin/uvicorn src.backend.main:app --host 0.0.0.0 --port 8000 > /tmp/wcah-backend.log 2>&1 &"

@@ -36,7 +36,7 @@ async def create_note(
         title=note_data.title,
         content=note_data.content,
         summary=note_data.summary,
-        resource_type=note_data.resource_type
+        note_type=note_data.note_type
     )
     
     db.add(new_note)
@@ -57,7 +57,7 @@ async def list_notes_by_topic(
     """
     notes = db.query(StudyNote).filter(
         StudyNote.topic_id == topic_id
-    ).order_by(StudyNote.likes_count.desc()).all()
+    ).order_by(StudyNote.likes.desc()).all()
     
     return [StudyNoteResponse.from_orm(note) for note in notes]
 
