@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Complete fix script for "Cannot connect to server" issue
+Startup script for Waterloo CS Study Note Hub
 This script will:
 1. Stop any running servers
 2. Clean up old processes and files
@@ -44,8 +44,8 @@ def run_command(cmd, description, ignore_errors=False):
 
 def main():
     print(f"{Colors.BOLD}{Colors.BLUE}")
-    print(f"  {Colors.BOLD}WCAH / WCSNH Complete Fix Script                          ║")
-    print(f"║         Solving 'Cannot connect to server' issue                ║")
+    print(f"  {Colors.BOLD}SE-StudyCenter - Startup Script                             ║")
+    print(f"║         Starting Backend and Frontend Services                  ║")
     print("╚══════════════════════════════════════════════════════════════════╝")
     print(Colors.END)
     

@@ -27,6 +27,7 @@ wcah.db
 .DS_Store
 
 # Environment variables
+.venv
 .env
 .env.local
 

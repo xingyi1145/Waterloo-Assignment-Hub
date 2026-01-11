@@ -1,14 +1,14 @@
-# **Project Charter — Waterloo CS Study Note Hub**
+# **Project Charter — SE-StudyCenter**
 
 ## **1. Project Title**
 
-**Waterloo CS Study Note Hub (WCSNH)**
+**SE-StudyCenter**
 
 ---
 
 ## **2. Project Overview**
 
-The Waterloo CS Study Note Hub is a peer-to-peer knowledge sharing platform designed to help students organize, share, and find high-quality study materials for University of Waterloo CS courses. Instead of traditional assignment grading, this platform focuses on collaborative learning through shared Markdown-based notes, cheat sheets, and course summaries. Professors can structure courses into topics, while students submit content to help their peers succeed.
+The SE-StudyCenter is a peer-to-peer knowledge sharing platform designed to help students organize, share, and find high-quality study materials for University of Waterloo CS courses. Instead of traditional assignment grading, this platform focuses on collaborative learning through shared Markdown-based notes, cheat sheets, and course summaries. Professors can structure courses into topics, while students submit content to help their peers succeed.
 
 ---
 

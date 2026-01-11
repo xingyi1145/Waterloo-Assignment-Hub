@@ -8,7 +8,7 @@ export const Navbar = () => {
     <nav className="navbar">
       <div className="nav-container">
         <Link to="/" className="nav-logo">
-          <h1>Waterloo CS Assignment Hub</h1>
+          <h1>SE-StudyCenter</h1>
         </Link>
         <div className="nav-links">
           {user ? (

@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="Waterloo CS Assignment Hub API",
+    title="SE-StudyCenter API",
     description="Backend API for CS assignment practice platform",
     version="1.0.0",
     lifespan=lifespan
@@ -42,7 +42,7 @@ app.include_router(notes.router, prefix="/api/notes", tags=["Notes"])
 @app.get("/")
 async def root():
     return {
-        "message": "Waterloo CS Assignment Hub API",
+        "message": "SE-StudyCenter API",
         "docs": "/docs",
         "version": "1.0.0"
     }
